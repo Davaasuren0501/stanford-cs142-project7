@@ -185,6 +185,7 @@ app.get("/photosOfUser/:id", function (request, response) {
 app.post("/admin/login", function (request, response) {
   console.log("====================================");
   console.log(request.body);
+  console.log(request.session);
   console.log("====================================");
   var loginName = request.body.login_name;
   var password = request.body.password;
@@ -201,15 +202,61 @@ app.post("/admin/login", function (request, response) {
         response.status(400).send("Not found");
         return;
       }
-      let session_data = request.session;
-      session_data.user_id = info._id;
-      session_data.first_name = info.first_name;
-      session_data.last_name = info.last_name;
+      console.log("====================================");
+      console.log(info);
+      console.log("====================================");
+      let session_data = { ...request.session, info };
       response.status(200).send({
-        _id: info._id,
+        session_data,
       });
     }
   );
+});
+
+app.post("/user", function (request, response) {
+  var loginName = request.body.login_name;
+  var firstName = request.body.first_name;
+  var lastName = request.body.last_name;
+  var location = request.body.location;
+  var description = request.body.description;
+  var occupation = request.body.occupation;
+  var password = request.body.password;
+  User.find({ login_name: loginName }, function (err, info) {
+    if (err) {
+      console.error("Verifying username error: ", err);
+      return;
+    }
+    if (info.length !== 0) {
+      response.status(400).send("Username already exists.");
+      return;
+    }
+    if (
+      loginName.length === 0 ||
+      password.length === 0 ||
+      firstName.length === 0 ||
+      lastName.length === 0
+    ) {
+      response.status(400).send("User information not valid.");
+      return;
+    }
+    var registeredUserObj = {
+      first_name: firstName,
+      last_name: lastName,
+      location: location,
+      description: description,
+      occupation: occupation,
+      login_name: loginName,
+      password: password,
+    };
+    User.create(registeredUserObj, function (error) {
+      if (error) {
+        console.error("Registering user error: ", error);
+        response.status(400).send(JSON.stringify(error));
+        return;
+      }
+      response.status(200).send("User successfully registered.");
+    });
+  });
 });
 
 var server = app.listen(5000, function () {

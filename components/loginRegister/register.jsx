@@ -23,7 +23,7 @@ export default function Register() {
       <br />
       <br />
       <button type="button">Register</button>
-      <Link to={`/admin/login`}>
+      <Link to={`/login`}>
         <button type="button">Login</button>
       </Link>
       <span> </span>
