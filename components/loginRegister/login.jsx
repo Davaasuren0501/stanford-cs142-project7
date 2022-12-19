@@ -73,12 +73,25 @@ class Login extends React.Component {
   handleLogin(event) {
     if (this.state.loginName !== "") {
       if (this.state.password !== "") {
-        var login = axios.post("/admin/login", {
+        var data = JSON.stringify({
           login_name: this.state.loginName,
           password: this.state.password,
         });
-        login
+
+        var config = {
+          method: "post",
+          url: "http://localhost:5000/admin/login",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: data,
+        };
+
+        axios(config)
           .then((response) => {
+            console.log("====================================");
+            console.log(response);
+            console.log("====================================");
             console.log("Login success!");
             let userDetailLink =
               "/photo-share.html#/users/" + response.data._id;

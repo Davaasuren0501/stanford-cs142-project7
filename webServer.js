@@ -185,7 +185,6 @@ app.get("/photosOfUser/:id", function (request, response) {
 app.post("/admin/login", function (request, response) {
   console.log("====================================");
   console.log(request.body);
-  console.log(request.session);
   console.log("====================================");
   var loginName = request.body.login_name;
   var password = request.body.password;
@@ -202,18 +201,35 @@ app.post("/admin/login", function (request, response) {
         response.status(400).send("Not found");
         return;
       }
-      console.log("====================================");
-      console.log(info);
-      console.log("====================================");
-      let session_data = { ...request.session, info };
+      let session_data = request.session;
+      session_data.user_id = info._id;
+      session_data.first_name = info.first_name;
+      session_data.last_name = info.last_name;
       response.status(200).send({
-        session_data,
+        _id: info._id,
       });
     }
   );
 });
 
+app.post("/admin/logout", function (request, response) {
+  if (
+    request.session.user_id === null ||
+    request.session.user_id === undefined
+  ) {
+    response.status(400).send("User is not logged in.");
+  } else {
+    request.session.destroy(function (err) {
+      console.log(err);
+    });
+    response.status(200).send("Logout success.");
+  }
+});
+
 app.post("/user", function (request, response) {
+  console.log("====================================");
+  console.log(request.body);
+  console.log("====================================");
   var loginName = request.body.login_name;
   var firstName = request.body.first_name;
   var lastName = request.body.last_name;

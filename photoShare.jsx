@@ -24,6 +24,12 @@ class PhotoShare extends React.Component {
 
   render() {
     console.log(this.state.token);
+    let isLoggedIn;
+    if (sessionStorage.getItem("isLoggedIn")) {
+      isLoggedIn = true;
+    } else {
+      isLoggedIn = false;
+    }
     return (
       <HashRouter>
         <div>
@@ -32,7 +38,8 @@ class PhotoShare extends React.Component {
               <TopBar />
             </Grid>
             <div className="cs142-main-topbar-buffer" />
-            {this.state.token !== undefined ? (
+            {/* {this.state.token !== undefined ? ( */}
+            {isLoggedIn ? (
               <>
                 <Grid item sm={3}>
                   <Paper className="cs142-main-grid-item">
