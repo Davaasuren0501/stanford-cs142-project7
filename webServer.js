@@ -213,6 +213,9 @@ app.post("/admin/login", function (request, response) {
 });
 
 app.post("/admin/logout", function (request, response) {
+  console.log("====================================");
+  console.log(request.session);
+  console.log("====================================");
   if (
     request.session.user_id === null ||
     request.session.user_id === undefined
@@ -271,6 +274,108 @@ app.post("/user", function (request, response) {
         return;
       }
       response.status(200).send("User successfully registered.");
+    });
+  });
+});
+
+app.post("/commentsOfPhoto/:photo_id", function (request, response) {
+  var session_user_id = request.session.user_id;
+  if (session_user_id === null || session_user_id === undefined) {
+    response.status(401).send("Unauthorized user");
+  }
+  if (
+    request.body.comment === null ||
+    request.body.comment === undefined ||
+    request.body.comment.length === 0
+  ) {
+    response.status(400).send("No comments added.");
+  }
+  var photoId = request.params.photo_id;
+  var today = new Date();
+  var currentTime = today.toISOString();
+  var newComment = {
+    comment: request.body.comment,
+    user_id: session_user_id,
+    date_time: currentTime,
+  };
+
+  Photo.findOne({ _id: photoId }, function (err, photoInfo) {
+    if (err) {
+      console.error("Doing /commentsOfPhoto/:photo_id error: ", err);
+      response.status(400).send(JSON.stringify(err));
+      return;
+    }
+    if (photoInfo === null || photoInfo === undefined) {
+      console.log("Photo not found.");
+      response.status(400).send("Not found");
+      return;
+    }
+    photoInfo.comments.push(newComment);
+    Photo.findOneAndUpdate(
+      { _id: photoId },
+      { comments: photoInfo.comments },
+      { new: true },
+      function (error) {
+        if (error) {
+          console.error("Adding comments error: ", error);
+          response.status(400).send(JSON.stringify(error));
+          return;
+        }
+        response.status(200).send("Comment successfully added.");
+      }
+    );
+  });
+});
+
+app.post("/photos/new", function (request, response) {
+  var session_user_id = request.session.user_id;
+  if (session_user_id === null || session_user_id === undefined) {
+    response.status(401).send("Unauthorized user");
+  }
+
+  processFormBody(request, response, function (err) {
+    if (err || !request.file) {
+      // XXX -  Insert error handling code here.
+      console.log("Processing photo error.");
+      response.status(400).send("Processing photo error.");
+      return;
+    }
+    // request.file has the following properties of interest
+    //      fieldname      - Should be 'uploadedphoto' since that is what we sent
+    //      originalname:  - The name of the file the user uploaded
+    //      mimetype:      - The mimetype of the image (e.g. 'image/jpeg',  'image/png')
+    //      buffer:        - A node Buffer containing the contents of the file
+    //      size:          - The size of the file in bytes
+
+    // XXX - Do some validation here.
+    // We need to create the file in the directory "images" under an unique name. We make
+    // the original file name unique by adding a unique prefix with a timestamp.
+    var timestamp = new Date().valueOf();
+    var filename = "U" + String(timestamp) + request.file.originalname;
+
+    fs.writeFile("./images/" + filename, request.file.buffer, function (err) {
+      // XXX - Once you have the file written into your images directory under the name
+      // filename you can create the Photo object in the database
+      if (err) {
+        console.log("Writing file error.");
+        return;
+      }
+      var today = new Date();
+      var currentTime = today.toISOString();
+      var photoObj = {
+        user_id: session_user_id,
+        file_name: filename,
+        date_time: currentTime,
+        comments: [],
+      };
+      Photo.create(photoObj, function (error) {
+        if (error) {
+          console.error("Adding photos error: ", error);
+          response.status(400).send(JSON.stringify(error));
+          return;
+        }
+        response.status(200).send({ user_id: session_user_id });
+      });
     });
   });
 });

@@ -22,3 +22,6 @@
 .loginRegister {
   display: flex;
 }
+.log_out {
+  cursor: pointer;
+}
