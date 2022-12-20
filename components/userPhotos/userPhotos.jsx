@@ -3,6 +3,8 @@ import { Paper, Typography, Divider, List, ListItem } from "@material-ui/core";
 import "./userPhotos.css";
 import fetchModel from "../../lib/fetchModelData";
 import Comments from "../comment/comments";
+import axios from "axios";
+import UserPhotoList from "../userPhotosList/userPhotoList";
 
 /*
  * Define UserPhotos, a React componment of CS142 project #5
@@ -11,7 +13,7 @@ import Comments from "../comment/comments";
 const UserPhotos = (props) => {
   console.log(props.match.params.userId);
   const [photos, setPhotos] = useState([]);
-  const [comment, setComment] = useState("");
+  const [check, setCheck] = useState(false);
   let writedComment;
   let c;
   useEffect(
@@ -24,19 +26,9 @@ const UserPhotos = (props) => {
       console.log(result);
       console.log("photos list");
       console.log(photos);
-      var currentURL = window.location.href;
-      // var _userId;
-      // if (currentURL.includes("/users/")) {
-      //   _userId = currentURL.substring(
-      //     currentURL.indexOf("/users/") + "/users/".length
-      //   );
-      //   console.log("====================================");
-      //   console.log(_userId);
-      //   console.log("====================================");
-      // }
     },
     //yu oorchlogdvol dahiad duudah huvisgchaa ene massv hiij ogno
-    []
+    [check]
   );
   console.log("========================================");
   console.log(photos);
@@ -50,25 +42,14 @@ const UserPhotos = (props) => {
             (c = writedComment != undefined),
             (
               // console.log("comment_id",writedComment),
-              <Paper key={index}>
-                <Typography>{element.date_time}</Typography>
-                <img
-                  style={{ width: "50%", height: "60%" }}
-                  src={"/../../images/" + element.file_name}
-                />
-                <div style={{ width: "50%", height: "60%" }}>
-                  {c ? (
-                    writedComment.map((commentIndex, index) => (
-                      <Comments key={index} el={commentIndex} />
-                    ))
-                  ) : (
-                    <p>no comment</p>
-                  )}
-                </div>
-                <input className="input_comment" placeholder="add comment..." />
-                <button type="button">Add</button>
-                <Divider />
-              </Paper>
+              <UserPhotoList
+                key={index}
+                element={element}
+                c={c}
+                writedComment={writedComment}
+                check={check}
+                setCheck={setCheck}
+              />
             )
           )
         )}

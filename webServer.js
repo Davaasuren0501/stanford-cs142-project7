@@ -280,10 +280,10 @@ app.post("/user", function (request, response) {
 });
 
 app.post("/commentsOfPhoto/:photo_id", function (request, response) {
-  var session_user_id = request.session.user_id;
-  if (session_user_id === null || session_user_id === undefined) {
-    response.status(401).send("Unauthorized user");
-  }
+  // var session_user_id = request.session.user_id;
+  // if (session_user_id === null || session_user_id === undefined) {
+  //   response.status(401).send("Unauthorized user");
+  // }
   if (
     request.body.comment === null ||
     request.body.comment === undefined ||
@@ -296,7 +296,7 @@ app.post("/commentsOfPhoto/:photo_id", function (request, response) {
   var currentTime = today.toISOString();
   var newComment = {
     comment: request.body.comment,
-    user_id: session_user_id,
+    user_id: request.body.user_id,
     date_time: currentTime,
   };
 
