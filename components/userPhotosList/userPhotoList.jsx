@@ -28,6 +28,7 @@ export default function UserPhotoList(props) {
         .then(function (response) {
           props.setCheck(!props.check);
           console.log(JSON.stringify(response.data));
+          setComment("");
         })
         .catch(function (error) {
           console.log(error);
