@@ -50,6 +50,7 @@ class Login extends React.Component {
               isLoginNameOrPasswordWrong: false,
             });
             sessionStorage.setItem("isLoggedIn", true);
+            sessionStorage.setItem("LoginUserId", response.data._id);
             //
             window.location.assign(userDetailLink);
             window.location.reload();

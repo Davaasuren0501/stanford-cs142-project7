@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Paper, Typography, Divider } from "@material-ui/core";
-import Comments from "../comment/comments";
 import axios from "axios";
+import Comments from "../comment/comments";
 
 export default function UserPhotoList(props) {
   const [comment, setComment] = useState("");
@@ -9,10 +9,15 @@ export default function UserPhotoList(props) {
     console.log("====================================");
     console.log(comment, id);
     console.log("====================================");
-    if (comment.length > 0 && id.length > 0) {
+
+    const login_user_id = sessionStorage.getItem("LoginUserId");
+    console.log("====================================");
+    console.log(login_user_id);
+    console.log("====================================");
+    if (comment.length > 0 && id.length > 0 && login_user_id.length > 0) {
       var data = JSON.stringify({
         comment: comment,
-        user_id: "63a0556a6d44add19b49b795",
+        user_id: login_user_id,
       });
 
       var config = {

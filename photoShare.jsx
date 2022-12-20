@@ -13,6 +13,8 @@ import UserPhotos from "./components/userPhotos/userPhotos";
 import Login from "./components/loginRegister/login";
 import Register from "./components/loginRegister/register";
 
+//context
+
 const cookies = new Cookies();
 class PhotoShare extends React.Component {
   constructor(props) {

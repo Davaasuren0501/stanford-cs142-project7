@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { AppBar, Toolbar, Typography } from "@material-ui/core";
 import "./TopBar.css";
 import fetchModel from "../../lib/fetchModelData";
-import axios from "axios";
 
 export default function TopBar() {
   const [user, setUser] = useState("");
