@@ -1,34 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AppBar, Toolbar, Typography } from "@material-ui/core";
 import "./TopBar.css";
-import { Cookies } from "react-cookie";
+import fetchModel from "../../lib/fetchModelData";
+import axios from "axios";
 
-/**
- * Define TopBar, a React componment of CS142 project #5
- */
-const cookies = new Cookies();
-class TopBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      token: cookies.get("session"),
-    };
-  }
+export default function TopBar() {
+  const [user, setUser] = useState("");
+  const [userId, setUserId] = useState("");
+  useEffect(() => {
+    var currentURL = window.location.href;
+    var _userId;
+    if (currentURL.includes("/users/")) {
+      _userId = currentURL.substring(
+        currentURL.indexOf("/users/") + "/users/".length
+      );
+      console.log("====================================");
+      console.log(_userId);
+      console.log("====================================");
+      let result = fetchModel(`http://localhost:5000/user/${_userId}`, setUser);
+      console.log("====================================");
+      console.log(result);
+      console.log("====================================");
+    }
+    console.log("====================================");
+    console.log(_userId);
+    console.log("====================================");
 
-  render() {
+    setUserId(_userId);
     console.log("====================================");
-    console.log(this.state.token);
+    console.log(user);
     console.log("====================================");
-    return (
-      <AppBar className="cs142-topbar-appBar" position="absolute">
-        <Toolbar className="toolbar">
-          <Typography variant="h5" color="inherit">
-            {this.state.token === undefined ? "photo share app" : "hi dear"}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    );
-  }
+  }, []);
+
+  const LogOut = () => {
+    console.log("====================================");
+    console.log("calling");
+    console.log("====================================");
+    window.location.assign("/photo-share.html#/login");
+    window.location.reload();
+    sessionStorage.clear();
+    setUserId(null);
+    setUser(null);
+  };
+  return (
+    <AppBar className="cs142-topbar-appBar" position="absolute">
+      <Toolbar className="toolbar">
+        <Typography variant="h5" color="inherit">
+          {userId === null || userId === undefined
+            ? "photo share app"
+            : user.login_name}
+        </Typography>
+        <Typography variant="h5" color="inherit" className="log_out">
+          <div onClick={LogOut}>
+            {userId === null || userId === undefined ? null : "Log Out"}
+          </div>
+        </Typography>
+      </Toolbar>
+    </AppBar>
+  );
 }
-
-export default TopBar;

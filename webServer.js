@@ -214,6 +214,7 @@ app.post("/admin/login", function (request, response) {
 
 app.post("/admin/logout", function (request, response) {
   console.log("====================================");
+  console.log("----------------------------------");
   console.log(request.session);
   console.log("====================================");
   if (
