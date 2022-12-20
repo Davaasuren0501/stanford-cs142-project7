@@ -24,6 +24,16 @@ const UserPhotos = (props) => {
       console.log(result);
       console.log("photos list");
       console.log(photos);
+      var currentURL = window.location.href;
+      // var _userId;
+      // if (currentURL.includes("/users/")) {
+      //   _userId = currentURL.substring(
+      //     currentURL.indexOf("/users/") + "/users/".length
+      //   );
+      //   console.log("====================================");
+      //   console.log(_userId);
+      //   console.log("====================================");
+      // }
     },
     //yu oorchlogdvol dahiad duudah huvisgchaa ene massv hiij ogno
     []
