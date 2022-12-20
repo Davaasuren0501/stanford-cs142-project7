@@ -7,6 +7,9 @@ var bodyParser = require("body-parser");
 var multer = require("multer");
 var fs = require("fs");
 
+var processFormBody = multer({ storage: multer.memoryStorage() }).single(
+  "uploadedphoto"
+);
 var express = require("express");
 var app = express();
 
@@ -329,10 +332,12 @@ app.post("/commentsOfPhoto/:photo_id", function (request, response) {
 });
 
 app.post("/photos/new", function (request, response) {
-  var session_user_id = request.session.user_id;
-  if (session_user_id === null || session_user_id === undefined) {
-    response.status(401).send("Unauthorized user");
-  }
+  console.log("====================================");
+  console.log(request.file);
+  console.log("====================================");
+  // if (session_user_id === null || session_user_id === undefined) {
+  //   response.status(401).send("Unauthorized user");
+  // }
 
   processFormBody(request, response, function (err) {
     if (err || !request.file) {

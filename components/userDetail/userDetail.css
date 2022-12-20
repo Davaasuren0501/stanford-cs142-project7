@@ -1,3 +1,7 @@
 .userDetail-description {
-    display: inline;
+  display: inline;
+}
+.upload {
+  display: flex;
+  justify-content: space-between;
 }
