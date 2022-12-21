@@ -334,6 +334,7 @@ app.post("/commentsOfPhoto/:photo_id", function (request, response) {
 app.post("/photos/new", function (request, response) {
   console.log("====================================");
   console.log(request.file);
+  console.log(request);
   console.log("====================================");
   // if (session_user_id === null || session_user_id === undefined) {
   //   response.status(401).send("Unauthorized user");
@@ -369,7 +370,7 @@ app.post("/photos/new", function (request, response) {
       var today = new Date();
       var currentTime = today.toISOString();
       var photoObj = {
-        user_id: session_user_id,
+        user_id: "63a081784bd63cf6806b3828",
         file_name: filename,
         date_time: currentTime,
         comments: [],
@@ -380,7 +381,8 @@ app.post("/photos/new", function (request, response) {
           response.status(400).send(JSON.stringify(error));
           return;
         }
-        response.status(200).send({ user_id: session_user_id });
+        console.log("bolsoooo------------------");
+        response.status(200).send({ user_id: "63a081784bd63cf6806b3828" });
       });
     });
   });

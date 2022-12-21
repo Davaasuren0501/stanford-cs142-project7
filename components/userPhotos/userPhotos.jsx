@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Paper, Typography, Divider, List, ListItem } from "@material-ui/core";
 import "./userPhotos.css";
 import fetchModel from "../../lib/fetchModelData";
-import Comments from "../comment/comments";
-import axios from "axios";
 import UserPhotoList from "../userPhotosList/userPhotoList";
 
 /*
  * Define UserPhotos, a React componment of CS142 project #5
  */
 
-const UserPhotos = (props) => {
+export default function UserPhotos(props) {
   console.log(props.match.params.userId);
   const [photos, setPhotos] = useState([]);
   const [check, setCheck] = useState(false);
@@ -55,6 +52,4 @@ const UserPhotos = (props) => {
         )}
     </div>
   );
-};
-
-export default UserPhotos;
+}

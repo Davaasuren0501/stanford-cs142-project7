@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Typography, Divider } from "@material-ui/core";
 import { HashRouter, Link, Route, useParams } from "react-router-dom";
 import "./userDetail.css";
-import fetchModel from "../../lib/fetchModelData";
 import axios from "axios";
 
-const UserDetail = (props) => {
-  // console.log( "ddddddddddddd " + props.match.params.userId );
-  // console.log( props.match.params.userId);
+import fetchModel from "../../lib/fetchModelData";
+
+export default function UserDetail(props) {
   const [user, setUser] = useState([]);
   // const [uploadInput, setUploadInput] = useState("");
   let uploadInput;
@@ -39,15 +38,17 @@ const UserDetail = (props) => {
       // Create a DOM form and add the file to it under the name uploadedphoto
       const domForm = new FormData();
       domForm.append("uploadedphoto", uploadInput.files[0]);
-      // axios
-      //   .post("http://localhost:5000/photos/new", domForm)
-      //   .then((res) => {
-      //     var photoURL = "/photo-share.html#/photos/" + res.data.user_id;
-      //     window.location.assign(photoURL);
-      //   })
-      //   .catch((err) => {
-      //     console.log(`POST ERR: ${err}`);
-      //   });
+      console.log(domForm);
+      axios
+        .post("http://localhost:5000/photos/new", domForm)
+        .then((res) => {
+          console.log(res.data);
+          // var photoURL = "/photo-share.html#/photos/" + res.data.user_id;
+          // window.location.assign(photoURL);
+        })
+        .catch((err) => {
+          console.log(`POST ERR: ${err}`);
+        });
     }
   };
 
@@ -100,6 +101,6 @@ const UserDetail = (props) => {
       </HashRouter>
     </div>
   );
-};
+}
 
-export default UserDetail;
+// export default UserDetail;
